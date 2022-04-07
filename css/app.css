@@ -1,0 +1,11 @@
+@import "minesweeper/minesweeper.css";
+
+body {
+    margin: 0;
+    width: 100vw;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffb0a3;
+}
