@@ -1,24 +1,25 @@
 class Minesweeper {
     constructor({el}) {
         this.element = document.querySelector(el);
-        this.grid = [];
+        this.board = [];
 
         this.rowCount = window.innerWidth > window.innerHeight ? 10 : 15;
         this.colCount = window.innerWidth > window.innerHeight ? 15 : 10;
         this.mineCount = 30;
 
-        this.opens = 0;
         this.mines = 0;
 
+        this.recursiveRevealed = [];
+
         for (let r = 0; r < this.rowCount; r += 1) {
-            this.grid[r] = document.createElement('div');
-            this.element.append(this.grid[r]);
+            this.board[r] = document.createElement('div');
+            this.element.append(this.board[r]);
 
             for (let c = 0; c < this.colCount; c += 1) {
-                this.grid[r][c] = document.createElement('button');
-                this.grid[r][c].row = r;
-                this.grid[r][c].col = c;
-                this.grid[r].append(this.grid[r][c]);
+                this.board[r][c] = document.createElement('button');
+                this.board[r][c].row = r;
+                this.board[r][c].col = c;
+                this.board[r].append(this.board[r][c]);
             }
         }
 
@@ -32,7 +33,7 @@ class Minesweeper {
         while (this.mines < this.mineCount) {
             const randomRow = Math.floor(Math.random() * this.rowCount);
             const randomCol = Math.floor(Math.random() * this.colCount);
-            const random = this.grid[randomRow][randomCol];
+            const random = this.board[randomRow][randomCol];
 
             const isAroundTargetRow = randomRow > target.row - 3 && randomRow < target.row + 3;
             const isAroundTargetCol = randomCol > target.col - 3 && randomCol < target.col + 3;
@@ -40,39 +41,52 @@ class Minesweeper {
             if ((isAroundTargetRow && isAroundTargetCol) || this.isMine(random))
                 continue;
 
-            this.addNumbersAround(randomRow, randomCol);
+            this.insertNumberToNeighbors(randomRow, randomCol);
 
             random.content = this.MINE_ICON;
             this.mines += 1;
         }
 
+        this.reveal(target);
+        this.recursiveRevealed = [this.squareId(target)];
 
-        target.disabled = true;
-        target.innerText = target.content ?? '';
-        let isOpening = true;
-
-        console.log(this.isNumber(target));
-
-        while (isOpening) {
-            isOpening = false;
-        }
-
-        // document.querySelectorAll('button').forEach((button) => {
-        //     button.disabled = 'disabled';
-        // });
+        this.isBlank(target) && this.revealNeighbors(target);
+        this.recursiveRevealed = [];
     }
 
-    addNumbersAround(r, c) {
-        [this.topLeft(r, c), this.topCenter(r, c), this.topRight(r, c),
-            this.centerLeft(r, c), this.centerRight(r, c),
-            this.bottomLeft(r, c), this.bottomCenter(r, c), this.bottomRight(r, c)].forEach(
-            (square) => square && !this.isMine(square) && (
+    insertNumberToNeighbors(r, c) {
+        this.getNeighbors(r, c)
+            .forEach((square) => square && !this.isMine(square) && (
                 square.content = this.parseNumber(square) + 1
             ));
     }
 
+    reveal(square) {
+        if (!square) return;
+        square.disabled = true;
+        square.innerText = square.content ?? '';
+        return this.isBlank(square);
+    }
+
+    revealNeighbors(square) {
+        this.getNeighbors(square.row, square.col).forEach((neighbor) => {
+            if (this.recursiveRevealed.includes(this.squareId(neighbor)))
+                return;
+            this.recursiveRevealed.push(this.squareId(neighbor));
+            this.reveal(neighbor) && this.revealNeighbors(neighbor);
+        });
+    }
+
+    squareId(square) {
+        return `${square.row}:${square.col}`;
+    }
+
     parseNumber(square) {
         return square.content === undefined ? 0 : parseInt(square.content);
+    }
+
+    isBlank(square) {
+        return square.content === undefined;
     }
 
     isMine(square) {
@@ -86,49 +100,55 @@ class Minesweeper {
     topLeft(r, c) {
         const row = r - 1;
         const col = c - 1;
-        return row < 0 || col < 0 ? false : this.grid[row][col];
+        return row < 0 || col < 0 ? false : this.board[row][col];
     }
 
     topCenter(r, c) {
         const row = r - 1;
         const col = c;
-        return row < 0 || col < 0 ? false : this.grid[row][col];
+        return row < 0 || col < 0 ? false : this.board[row][col];
     }
 
     topRight(r, c) {
         const row = r - 1;
         const col = c + 1;
-        return row < 0 || col >= this.colCount ? false : this.grid[row][col];
+        return row < 0 || col >= this.colCount ? false : this.board[row][col];
     }
 
     centerLeft(r, c) {
         const row = r;
         const col = c - 1;
-        return row < 0 || col < 0 ? false : this.grid[row][col];
+        return row < 0 || col < 0 ? false : this.board[row][col];
     }
 
     centerRight(r, c) {
         const row = r;
         const col = c + 1;
-        return row >= this.rowCount || col >= this.colCount ? false : this.grid[row][col];
+        return row >= this.rowCount || col >= this.colCount ? false : this.board[row][col];
     }
 
     bottomLeft(r, c) {
         const row = r + 1;
         const col = c - 1;
-        return row >= this.rowCount || col < 0 ? false : this.grid[row][col];
+        return row >= this.rowCount || col < 0 ? false : this.board[row][col];
     }
 
     bottomCenter(r, c) {
         const row = r + 1;
         const col = c;
-        return row >= this.rowCount || col >= this.colCount ? false : this.grid[row][col];
+        return row >= this.rowCount || col >= this.colCount ? false : this.board[row][col];
     }
 
     bottomRight(r, c) {
         const row = r + 1;
         const col = c + 1;
-        return row >= this.rowCount || col >= this.colCount ? false : this.grid[row][col];
+        return row >= this.rowCount || col >= this.colCount ? false : this.board[row][col];
+    }
+
+    getNeighbors(r, c) {
+        return [this.topLeft(r, c), this.topCenter(r, c), this.topRight(r, c),
+            this.centerLeft(r, c), this.centerRight(r, c),
+            this.bottomLeft(r, c), this.bottomCenter(r, c), this.bottomRight(r, c)];
     }
 
     get MINE_ICON() {
