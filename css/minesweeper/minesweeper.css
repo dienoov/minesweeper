@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 .minesweeper {
     --minesweeper-primary-background: #ff6973;
     --minesweeper-primary-foreground: #46425e;
@@ -5,8 +7,12 @@
     --minesweeper-secondary-foreground: #ffb0a3;
     --minesweeper-button-size: 48px;
     --minesweeper-border-width: 4px;
+    --minesweeper-font-family: 'Press Start 2P', cursive;
+    --minesweeper-font-size: calc(var(--minesweeper-button-size) / 2);
+
     background-color: var(--minesweeper-primary-foreground);
     border: calc((var(--minesweeper-border-width)) * 2) solid var(--minesweeper-primary-foreground);
+    font-family: var(--minesweeper-font-family);
 }
 
 @media (max-width: 576px) {
@@ -27,8 +33,14 @@
 }
 
 .minesweeper > div > button {
-    background-color: var(--minesweeper-primary-background);
-    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
+    background-color: var(--minesweeper-secondary-background);
+    border: var(--minesweeper-border-width) solid var(--minesweeper-secondary-foreground);
+    font-family: var(--minesweeper-font-family);
+    font-size: var(--minesweeper-font-size);
+    color: var(--minesweeper-primary-foreground);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .minesweeper > div > button:hover {
