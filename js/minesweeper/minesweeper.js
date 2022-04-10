@@ -30,6 +30,8 @@ class Minesweeper {
     click(ev) {
         const target = ev.target.closest('button');
 
+        if (!target) return;
+
         while (this.mines < this.mineCount) {
             const randomRow = Math.floor(Math.random() * this.rowCount);
             const randomCol = Math.floor(Math.random() * this.colCount);
@@ -70,8 +72,7 @@ class Minesweeper {
 
     revealNeighbors(square) {
         this.getNeighbors(square.row, square.col).forEach((neighbor) => {
-            if (this.recursiveRevealed.includes(this.squareId(neighbor)))
-                return;
+            if (this.recursiveRevealed.includes(this.squareId(neighbor))) return;
             this.recursiveRevealed.push(this.squareId(neighbor));
             this.reveal(neighbor) && this.revealNeighbors(neighbor);
         });
