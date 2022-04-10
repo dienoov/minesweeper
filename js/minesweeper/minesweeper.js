@@ -67,6 +67,7 @@ class Minesweeper {
         if (!square) return;
         square.disabled = true;
         square.innerText = square.content ?? '';
+        square.content && square.classList.add(square.content);
         return this.isBlank(square);
     }
 

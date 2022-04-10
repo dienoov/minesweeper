@@ -5,10 +5,19 @@
     --minesweeper-primary-foreground: #46425e;
     --minesweeper-secondary-background: #ffeecc;
     --minesweeper-secondary-foreground: #ffb0a3;
+
     --minesweeper-button-size: 48px;
     --minesweeper-border-width: 4px;
+
     --minesweeper-font-family: 'Press Start 2P', cursive;
     --minesweeper-font-size: calc(var(--minesweeper-button-size) / 2);
+
+    --minesweeper-color-one: #6461c2;
+    --minesweeper-color-two: #93d4b5;
+    --minesweeper-color-three: #e39aac;
+    --minesweeper-color-four: #634b7d;
+    --minesweeper-color-five: #c45d9f;
+    --minesweeper-color-six: #2ba9b4;
 
     background-color: var(--minesweeper-primary-foreground);
     border: calc((var(--minesweeper-border-width)) * 2) solid var(--minesweeper-primary-foreground);
@@ -54,6 +63,30 @@
 .minesweeper > div > button:disabled {
     background-color: var(--minesweeper-secondary-background);
     border-color: var(--minesweeper-secondary-foreground);
+}
+
+.minesweeper > div > button[class="1"] {
+    color: var(--minesweeper-color-one);
+}
+
+.minesweeper > div > button[class="2"] {
+    color: var(--minesweeper-color-two);
+}
+
+.minesweeper > div > button[class="3"] {
+    color: var(--minesweeper-color-three);
+}
+
+.minesweeper > div > button[class="4"] {
+    color: var(--minesweeper-color-four);
+}
+
+.minesweeper > div > button[class="5"] {
+    color: var(--minesweeper-color-five);
+}
+
+.minesweeper > div > button[class="6"] {
+    color: var(--minesweeper-color-six);
 }
 
 .minesweeper > div:first-child > button {
