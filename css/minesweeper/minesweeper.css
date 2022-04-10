@@ -33,19 +33,27 @@
 }
 
 .minesweeper > div > button {
-    background-color: var(--minesweeper-secondary-background);
-    border: var(--minesweeper-border-width) solid var(--minesweeper-secondary-foreground);
+    background-color: var(--minesweeper-primary-background);
+    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
     font-family: var(--minesweeper-font-family);
     font-size: var(--minesweeper-font-size);
     color: var(--minesweeper-primary-foreground);
     display: flex;
     justify-content: center;
     align-items: center;
+    transition-property: background-color, border;
+    transition-duration: .1s;
+    transition-timing-function: ease-out;
 }
 
 .minesweeper > div > button:hover {
     background-color: var(--minesweeper-primary-foreground);
     cursor: pointer;
+}
+
+.minesweeper > div > button:disabled {
+    background-color: var(--minesweeper-secondary-background);
+    border-color: var(--minesweeper-secondary-foreground);
 }
 
 .minesweeper > div:first-child > button {

@@ -5,7 +5,7 @@ class Minesweeper {
 
         this.rowCount = window.innerWidth > window.innerHeight ? 10 : 15;
         this.colCount = window.innerWidth > window.innerHeight ? 15 : 10;
-        this.mineCount = 20;
+        this.mineCount = 30;
 
         this.opens = 0;
         this.mines = 0;
@@ -42,9 +42,24 @@ class Minesweeper {
 
             this.addNumbersAround(randomRow, randomCol);
 
-            random.innerText = this.MINE_ICON;
+            random.content = this.MINE_ICON;
             this.mines += 1;
         }
+
+
+        target.disabled = true;
+        target.innerText = target.content ?? '';
+        let isOpening = true;
+
+        console.log(this.isNumber(target));
+
+        while (isOpening) {
+            isOpening = false;
+        }
+
+        // document.querySelectorAll('button').forEach((button) => {
+        //     button.disabled = 'disabled';
+        // });
     }
 
     addNumbersAround(r, c) {
@@ -52,16 +67,20 @@ class Minesweeper {
             this.centerLeft(r, c), this.centerRight(r, c),
             this.bottomLeft(r, c), this.bottomCenter(r, c), this.bottomRight(r, c)].forEach(
             (square) => square && !this.isMine(square) && (
-                square.innerText = this.parseNumber(square) + 1
+                square.content = this.parseNumber(square) + 1
             ));
     }
 
     parseNumber(square) {
-        return square.innerText === '' ? 0 : parseInt(square.innerText);
+        return square.content === undefined ? 0 : parseInt(square.content);
     }
 
     isMine(square) {
-        return square.innerText === '*';
+        return square.content === '*';
+    }
+
+    isNumber(square) {
+        return /^\d$/.test(square.content);
     }
 
     topLeft(r, c) {
