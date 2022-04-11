@@ -22,9 +22,12 @@ class Minesweeper {
             }
         }
 
+        this.grid.classList.add('grid');
         this.element.append(this.grid);
+
         this.element.classList.add('minesweeper');
         this.isPortrait && this.element.classList.add('portrait');
+
         this.element.addEventListener('click', this.click.bind(this));
     }
 

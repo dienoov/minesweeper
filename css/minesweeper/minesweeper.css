@@ -12,6 +12,7 @@
     --minesweeper-font-family: 'Press Start 2P', monospace;
     --minesweeper-font-size: calc(var(--minesweeper-button-size) / 2);
 
+    --minesweeper-color-mine: #00b9be;
     --minesweeper-color-one: #6461c2;
     --minesweeper-color-two: #93d4b5;
     --minesweeper-color-three: #e39aac;
@@ -26,22 +27,22 @@
 @media (max-width: 576px) {
     .minesweeper {
         --minesweeper-button-size: 32px;
-        --minesweeper-border-width: 3px;
+        --minesweeper-border-width: 4px;
     }
 }
 
-.minesweeper > div {
+.minesweeper > .grid {
     display: grid;
     grid-template-columns: repeat(15, 1fr);
     grid-gap: var(--minesweeper-border-width);
     background-color: var(--minesweeper-secondary-foreground);
 }
 
-.minesweeper.portrait > div {
+.minesweeper.portrait > .grid {
     grid-template-columns: repeat(10, 1fr);
 }
 
-.minesweeper > div > button {
+.minesweeper > .grid > button {
     width: var(--minesweeper-button-size);
     height: var(--minesweeper-button-size);
     background-color: var(--minesweeper-primary-background);
@@ -55,36 +56,42 @@
     align-items: center;
 }
 
-.minesweeper > div > button:hover {
+.minesweeper > .grid > button:hover {
     background-color: var(--minesweeper-primary-foreground);
     cursor: pointer;
 }
 
-.minesweeper > div > button:disabled {
+.minesweeper > .grid > button:disabled {
     background-color: var(--minesweeper-secondary-background);
     box-shadow: none;
 }
 
-.minesweeper > div > button[class="1"] {
+.minesweeper > .grid > button[class="1"] {
     color: var(--minesweeper-color-one);
 }
 
-.minesweeper > div > button[class="2"] {
+.minesweeper > .grid > button[class="2"] {
     color: var(--minesweeper-color-two);
 }
 
-.minesweeper > div > button[class="3"] {
+.minesweeper > .grid > button[class="3"] {
     color: var(--minesweeper-color-three);
 }
 
-.minesweeper > div > button[class="4"] {
+.minesweeper > .grid > button[class="4"] {
     color: var(--minesweeper-color-four);
 }
 
-.minesweeper > div > button[class="5"] {
+.minesweeper > .grid > button[class="5"] {
     color: var(--minesweeper-color-five);
 }
 
-.minesweeper > div > button[class="6"] {
+.minesweeper > .grid > button[class="6"] {
     color: var(--minesweeper-color-six);
+}
+
+.minesweeper > .grid > button[class="*"] {
+    background-color: var(--minesweeper-color-mine);
+    color: var(--minesweeper-primary-foreground);
+    box-shadow: 0 0 0 var(--minesweeper-border-width) var(--minesweeper-primary-foreground);
 }
