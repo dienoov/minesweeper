@@ -1,10 +1,11 @@
 class Minesweeper {
     constructor({el}) {
         this.element = document.querySelector(el);
-        this.board = [];
+        this.grid = document.createElement('div');
+        this.squares = [];
 
-        this.rowCount = window.innerWidth > window.innerHeight ? 10 : 15;
-        this.colCount = window.innerWidth > window.innerHeight ? 15 : 10;
+        this.rowCount = this.isPortrait ? 15 : 10;
+        this.colCount = this.isPortrait ? 10 : 15;
         this.mineCount = 30;
 
         this.mines = 0;
@@ -12,33 +13,33 @@ class Minesweeper {
         this.recursiveRevealed = [];
 
         for (let r = 0; r < this.rowCount; r += 1) {
-            this.board[r] = document.createElement('div');
-            this.element.append(this.board[r]);
-
+            this.squares[r] = [];
             for (let c = 0; c < this.colCount; c += 1) {
-                this.board[r][c] = document.createElement('button');
-                this.board[r][c].row = r;
-                this.board[r][c].col = c;
-                this.board[r].append(this.board[r][c]);
+                this.squares[r][c] = document.createElement('button');
+                this.squares[r][c].row = r;
+                this.squares[r][c].col = c;
+                this.grid.append(this.squares[r][c]);
             }
         }
 
+        this.element.append(this.grid);
         this.element.classList.add('minesweeper');
+        this.isPortrait && this.element.classList.add('portrait');
         this.element.addEventListener('click', this.click.bind(this));
     }
 
     click(ev) {
-        const target = ev.target.closest('button');
+        const square = ev.target.closest('button');
 
-        if (!target) return;
+        if (!square) return;
 
         while (this.mines < this.mineCount) {
             const randomRow = Math.floor(Math.random() * this.rowCount);
             const randomCol = Math.floor(Math.random() * this.colCount);
-            const random = this.board[randomRow][randomCol];
+            const random = this.squares[randomRow][randomCol];
 
-            const isAroundTargetRow = randomRow > target.row - 3 && randomRow < target.row + 3;
-            const isAroundTargetCol = randomCol > target.col - 3 && randomCol < target.col + 3;
+            const isAroundTargetRow = randomRow > square.row - 3 && randomRow < square.row + 3;
+            const isAroundTargetCol = randomCol > square.col - 3 && randomCol < square.col + 3;
 
             if ((isAroundTargetRow && isAroundTargetCol) || this.isMine(random))
                 continue;
@@ -49,10 +50,10 @@ class Minesweeper {
             this.mines += 1;
         }
 
-        this.reveal(target);
-        this.recursiveRevealed = [this.squareId(target)];
+        this.reveal(square);
+        this.recursiveRevealed = [this.squareId(square)];
 
-        this.isBlank(target) && this.revealNeighbors(target);
+        this.isBlank(square) && this.revealNeighbors(square);
         this.recursiveRevealed = [];
     }
 
@@ -102,55 +103,59 @@ class Minesweeper {
     topLeft(r, c) {
         const row = r - 1;
         const col = c - 1;
-        return row < 0 || col < 0 ? false : this.board[row][col];
+        return row < 0 || col < 0 ? false : this.squares[row][col];
     }
 
     topCenter(r, c) {
         const row = r - 1;
         const col = c;
-        return row < 0 || col < 0 ? false : this.board[row][col];
+        return row < 0 || col < 0 ? false : this.squares[row][col];
     }
 
     topRight(r, c) {
         const row = r - 1;
         const col = c + 1;
-        return row < 0 || col >= this.colCount ? false : this.board[row][col];
+        return row < 0 || col >= this.colCount ? false : this.squares[row][col];
     }
 
     centerLeft(r, c) {
         const row = r;
         const col = c - 1;
-        return row < 0 || col < 0 ? false : this.board[row][col];
+        return row < 0 || col < 0 ? false : this.squares[row][col];
     }
 
     centerRight(r, c) {
         const row = r;
         const col = c + 1;
-        return row >= this.rowCount || col >= this.colCount ? false : this.board[row][col];
+        return row >= this.rowCount || col >= this.colCount ? false : this.squares[row][col];
     }
 
     bottomLeft(r, c) {
         const row = r + 1;
         const col = c - 1;
-        return row >= this.rowCount || col < 0 ? false : this.board[row][col];
+        return row >= this.rowCount || col < 0 ? false : this.squares[row][col];
     }
 
     bottomCenter(r, c) {
         const row = r + 1;
         const col = c;
-        return row >= this.rowCount || col >= this.colCount ? false : this.board[row][col];
+        return row >= this.rowCount || col >= this.colCount ? false : this.squares[row][col];
     }
 
     bottomRight(r, c) {
         const row = r + 1;
         const col = c + 1;
-        return row >= this.rowCount || col >= this.colCount ? false : this.board[row][col];
+        return row >= this.rowCount || col >= this.colCount ? false : this.squares[row][col];
     }
 
     getNeighbors(r, c) {
         return [this.topLeft(r, c), this.topCenter(r, c), this.topRight(r, c),
             this.centerLeft(r, c), this.centerRight(r, c),
             this.bottomLeft(r, c), this.bottomCenter(r, c), this.bottomRight(r, c)];
+    }
+
+    get isPortrait() {
+        return window.innerWidth < window.innerHeight;
     }
 
     get MINE_ICON() {

@@ -7,9 +7,9 @@
     --minesweeper-secondary-foreground: #ffb0a3;
 
     --minesweeper-button-size: 48px;
-    --minesweeper-border-width: 4px;
+    --minesweeper-border-width: 6px;
 
-    --minesweeper-font-family: 'Press Start 2P', cursive;
+    --minesweeper-font-family: 'Press Start 2P', monospace;
     --minesweeper-font-size: calc(var(--minesweeper-button-size) / 2);
 
     --minesweeper-color-one: #6461c2;
@@ -19,40 +19,40 @@
     --minesweeper-color-five: #c45d9f;
     --minesweeper-color-six: #2ba9b4;
 
-    background-color: var(--minesweeper-primary-foreground);
-    border: calc((var(--minesweeper-border-width)) * 2) solid var(--minesweeper-primary-foreground);
+    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
     font-family: var(--minesweeper-font-family);
 }
 
 @media (max-width: 576px) {
     .minesweeper {
-        --minesweeper-button-size: 36px;
+        --minesweeper-button-size: 32px;
         --minesweeper-border-width: 3px;
     }
 }
 
 .minesweeper > div {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-gap: var(--minesweeper-border-width);
+    background-color: var(--minesweeper-secondary-foreground);
+}
+
+.minesweeper.portrait > div {
+    grid-template-columns: repeat(10, 1fr);
 }
 
 .minesweeper > div > button {
     width: var(--minesweeper-button-size);
     height: var(--minesweeper-button-size);
-    border: none;
-}
-
-.minesweeper > div > button {
     background-color: var(--minesweeper-primary-background);
-    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
+    border: none;
+    box-shadow: 0 0 0 var(--minesweeper-border-width) var(--minesweeper-primary-foreground);
     font-family: var(--minesweeper-font-family);
     font-size: var(--minesweeper-font-size);
     color: var(--minesweeper-primary-foreground);
     display: flex;
     justify-content: center;
     align-items: center;
-    transition-property: background-color, border;
-    transition-duration: .1s;
-    transition-timing-function: ease-out;
 }
 
 .minesweeper > div > button:hover {
@@ -62,7 +62,7 @@
 
 .minesweeper > div > button:disabled {
     background-color: var(--minesweeper-secondary-background);
-    border-color: var(--minesweeper-secondary-foreground);
+    box-shadow: none;
 }
 
 .minesweeper > div > button[class="1"] {
@@ -87,24 +87,4 @@
 
 .minesweeper > div > button[class="6"] {
     color: var(--minesweeper-color-six);
-}
-
-.minesweeper > div:first-child > button {
-    height: calc(var(--minesweeper-button-size) - var(--minesweeper-border-width));
-    border-top: none;
-}
-
-.minesweeper > div:last-child > button {
-    height: calc(var(--minesweeper-button-size) - var(--minesweeper-border-width));
-    border-bottom: none;
-}
-
-.minesweeper > div > button:first-child {
-    width: calc(var(--minesweeper-button-size) - var(--minesweeper-border-width));
-    border-left: none;
-}
-
-.minesweeper > div > button:last-child {
-    width: calc(var(--minesweeper-button-size) - var(--minesweeper-border-width));
-    border-right: none;
 }
