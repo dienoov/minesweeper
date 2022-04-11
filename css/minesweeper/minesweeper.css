@@ -20,7 +20,6 @@
     --minesweeper-color-five: #c45d9f;
     --minesweeper-color-six: #2ba9b4;
 
-    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
     font-family: var(--minesweeper-font-family);
 }
 
@@ -32,6 +31,7 @@
 }
 
 .minesweeper > .grid {
+    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
     display: grid;
     grid-template-columns: repeat(15, 1fr);
     grid-gap: var(--minesweeper-border-width);
@@ -94,4 +94,28 @@
     background-color: var(--minesweeper-color-mine);
     color: var(--minesweeper-primary-foreground);
     box-shadow: 0 0 0 var(--minesweeper-border-width) var(--minesweeper-primary-foreground);
+}
+
+.minesweeper > .info {
+    height: var(--minesweeper-button-size);
+    background-color: var(--minesweeper-primary-foreground);
+    color: var(--minesweeper-secondary-foreground);
+    border: var(--minesweeper-border-width) solid var(--minesweeper-primary-foreground);
+    border-bottom: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.minesweeper > .info > .clock, .minesweeper > .info > .flag {
+    display: flex;
+    align-items: center;
+    font-size: calc(var(--minesweeper-button-size) * (2 / 5));
+    margin-right: var(--minesweeper-border-width);
+}
+
+.minesweeper > .info > .clock > img, .minesweeper > .info > .flag > img {
+    width: var(--minesweeper-button-size);
+    height: var(--minesweeper-button-size);
+    margin-right: var(--minesweeper-border-width);
 }

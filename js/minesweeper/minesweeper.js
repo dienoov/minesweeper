@@ -6,11 +6,22 @@ class Minesweeper {
 
         this.rowCount = this.isPortrait ? 15 : 10;
         this.colCount = this.isPortrait ? 10 : 15;
-        this.mineCount = 30;
+        this.mineCount = 25;
 
         this.mines = 0;
-
         this.recursiveRevealed = [];
+
+        this.info = document.createElement('div');
+
+        this.clockWrapper = document.createElement('div');
+        this.clockIcon = document.createElement('img');
+        this.clockText = document.createElement('time');
+        this.startClock = 0;
+
+        this.flagWrapper = document.createElement('div');
+        this.flagIcon = document.createElement('img');
+        this.flagText = document.createElement('span');
+        this.startFlag = this.mineCount;
 
         for (let r = 0; r < this.rowCount; r += 1) {
             this.squares[r] = [];
@@ -21,6 +32,20 @@ class Minesweeper {
                 this.grid.append(this.squares[r][c]);
             }
         }
+
+        this.clockWrapper.classList.add('clock');
+        this.clockIcon.src = 'svg/clock.svg';
+        this.clockText.innerText = '0';
+        this.clockWrapper.append(this.clockIcon, this.clockText);
+
+        this.flagWrapper.classList.add('flag');
+        this.flagIcon.src = 'svg/flag.svg';
+        this.flagText.innerText = this.startFlag;
+        this.flagWrapper.append(this.flagIcon, this.flagText);
+
+        this.info.classList.add('info');
+        this.info.append(this.clockWrapper, this.flagWrapper);
+        this.element.append(this.info);
 
         this.grid.classList.add('grid');
         this.element.append(this.grid);
@@ -35,6 +60,11 @@ class Minesweeper {
         const square = ev.target.closest('button');
 
         if (!square) return;
+
+        if (this.startClock === 0) {
+            this.startClock = new Date().getTime();
+            setInterval(this.timer.bind(this), 1000);
+        }
 
         while (this.mines < this.mineCount) {
             const randomRow = Math.floor(Math.random() * this.rowCount);
@@ -58,6 +88,11 @@ class Minesweeper {
 
         this.isBlank(square) && this.revealNeighbors(square);
         this.recursiveRevealed = [];
+    }
+
+    timer() {
+        const diff = new Date().getTime() - this.startClock;
+        this.clockText.innerText = Math.floor(diff / 1000);
     }
 
     insertNumberToNeighbors(r, c) {
